@@ -4,27 +4,23 @@ enum State {
 }
 
 export class Board {
-    // @ts-ignore
     private width: number;
-    // @ts-ignore
     private height: number;
-    // @ts-ignore
-    private numBombs: number;
+    //private numBombs: number;
     private state: State[][];
 
-    constructor(width: number, height: number, numBombs: number) {
+    constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
-        this.numBombs = numBombs;
-
-        // TODO create a proper board and place bombs
-        this.state = [
-            [State.Bomb, State.Bomb, State.Empty, State.Empty, State.Empty],
-            [State.Empty, State.Bomb, State.Empty, State.Bomb, State.Empty],
-            [State.Empty, State.Empty, State.Empty, State.Empty, State.Empty],
-            [State.Empty, State.Empty, State.Bomb, State.Bomb, State.Empty],
-            [State.Empty, State.Empty, State.Empty, State.Empty, State.Empty]
-        ];
+        //this.numBombs = numBombs;
+        
+        this.state = [];
+        for (let i = 0; i < this.height; i++) {
+            this.state.push([]);
+            for (let j = 0; j < this.width; j++) {
+                this.state[i].push(State.Empty);
+            }
+        }
     }
 
     getXYState(x: number, y: number): State {

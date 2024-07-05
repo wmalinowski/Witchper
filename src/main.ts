@@ -7,7 +7,7 @@ function initGame(container: HTMLDivElement | null) {
     throw new Error('Error loading game');
   }
 
-  const board = new Board(10, 10, 15);
+  const board = new Board(7, 3);
   const width = board.getWidth();
   const height = board.getHeight();
 
