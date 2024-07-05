@@ -1,24 +1,30 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import './style.css';
+import { Board } from "./board.ts";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+function initGame(container: HTMLDivElement | null) {
+  if (!container) {
+    throw new Error('Error loading game');
+  }
+
+  const board = new Board(10, 10, 15);
+  const width = board.getWidth();
+  const height = board.getHeight();
+
+  const table = document.createElement('table');
+
+  for (let i = 0; i < height; i++) {
+    const row = document.createElement('tr');
+    for (let j = 0; j < width; j++) {
+      const cell = document.createElement('td');
+      cell.textContent = board.getXYState(i, j);
+      row.appendChild(cell);
+    }
+    table.appendChild(row);
+  }
+
+  container.appendChild(table);
+}
+
+const app = document.querySelector<HTMLDivElement>('#app');
+initGame(app);
