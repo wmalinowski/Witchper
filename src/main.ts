@@ -7,17 +7,17 @@ function initGame(container: HTMLDivElement | null) {
     throw new Error('Error loading game');
   }
 
-  const board = new Board(7, 3);
+  const board = new Board(7, 3, 5);
   const width = board.getWidth();
   const height = board.getHeight();
 
   const table = document.createElement('table');
 
-  for (let i = 0; i < height; i++) {
+  for (let y = 0; y < height; y++) {
     const row = document.createElement('tr');
-    for (let j = 0; j < width; j++) {
+    for (let x = 0; x < width; x++) {
       const cell = document.createElement('td');
-      cell.textContent = board.getXYState(i, j);
+      cell.textContent = board.getXYState(x, y);
       row.appendChild(cell);
     }
     table.appendChild(row);

@@ -1,3 +1,5 @@
+import arrayShuffle from 'array-shuffle';
+
 enum State {
     Bomb = 'B',
     Empty = ''
@@ -6,32 +8,36 @@ enum State {
 export class Board {
     private width: number;
     private height: number;
-    //private numBombs: number;
-    private state: State[][];
+    private numBombs: number;
+    private state: State[];
 
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, numBombs: number) {
         this.width = width;
         this.height = height;
-        //this.numBombs = numBombs;
+        this.numBombs = numBombs;
         
         this.state = [];
         for (let i = 0; i < this.height; i++) {
-            this.state.push([]);
             for (let j = 0; j < this.width; j++) {
-                this.state[i].push(State.Empty);
+                this.state.push(State.Empty);
             }
         }
+
+        for (let i = 0; i < this.numBombs; i++) {
+            this.state[i] = State.Bomb
+        }
+        this.state = arrayShuffle(this.state)
     }
 
     getXYState(x: number, y: number): State {
-        return this.state[x][y];
+        return this.state[y*this.width+x];
     }
 
     getWidth(): number {
-        return this.state[0].length;
+        return this.width;
     }
 
     getHeight(): number {
-        return this.state.length;
+        return this.height;
     }
 }
