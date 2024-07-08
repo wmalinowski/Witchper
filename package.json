@@ -1,18 +1,24 @@
 {
   "name": "witchper",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
+    "build-assets": "audiosprite -o public/sound/sprites -u sound -f howler2 -c 1 -e mp3 assets/sound/* && mv public/sound/sprites.json src/",
+    "format": "prettier -w src/",
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "npm run build-assets && tsc && vite build",
+    "preview": "npm run build-assets && vite preview"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.11",
+    "audiosprite": "^0.7.2",
+    "prettier": "^3.3.2",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   },
   "dependencies": {
-    "array-shuffle": "^3.0.0"
+    "array-shuffle": "^3.0.0",
+    "howler": "^2.2.4"
   }
 }
