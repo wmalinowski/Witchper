@@ -48,8 +48,8 @@ export class Board {
         if (this.getXYState(x, y + 1) === State.Bomb) numBombs++;
         if (this.getXYState(x + 1, y + 1) === State.Bomb) numBombs++;
         if (numBombs > 0)
-        //@ts-ignore
-        this.state[y * this.width + x] = numBombs.toString();
+          //@ts-ignore
+          this.state[y * this.width + x] = numBombs.toString();
       }
     }
   }

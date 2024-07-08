@@ -13,3 +13,11 @@ td {
 
   border: solid black 5px;
 }
+
+td.covered {
+  background-color: gray;
+}
+
+td.uncovered {
+  background-color: aqua;
+}

@@ -16,7 +16,12 @@ function initGame(container: HTMLDivElement | null) {
     const row = document.createElement("tr");
     for (let x = 0; x < width; x++) {
       const cell = document.createElement("td");
-      cell.textContent = board.getXYState(x, y);
+      cell.classList.add("covered");
+      cell.onclick = () => {
+        cell.textContent = board.getXYState(x, y);
+        cell.classList.remove("covered");
+        cell.classList.add("uncovered");
+      };
       row.appendChild(cell);
     }
     table.appendChild(row);
