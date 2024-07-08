@@ -1,5 +1,6 @@
 body {
   margin: 0px;
+  background-color: rgb(218, 213, 213);
 }
 
 #app {
@@ -21,3 +22,15 @@ td.covered {
 td.uncovered {
   background-color: aqua;
 }
+
+.info {
+  text-align: center;
+  font-family: Cambria, serif;
+}
+
+.info ul {
+  display: inline;
+  list-style-type: none;
+}
+
+.info h3 { margin: 0.12em 0 }
