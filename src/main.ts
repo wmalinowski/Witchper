@@ -17,24 +17,51 @@ function isHowlOptions(json: unknown): json is HowlOptions {
 if (!isHowlOptions(json)) throw new Error("Internal error");
 const soundSprites = new Howl(json);
 
+function refreshHTML(tableEl: HTMLTableElement, board: Board) {
+  const cells = <NodeListOf<HTMLTableCellElement>>(
+    tableEl.querySelectorAll(":scope td")
+  );
+  for (const cell of cells) {
+    const x = Number(cell.dataset.x);
+    const y = Number(cell.dataset.y);
+    const state = board.getXYState(x, y);
+    const covered = board.getCoveredState(x, y);
+
+    cell.classList.value = "";
+
+    if (covered === true) {
+      cell.classList.add("covered");
+    } else if (covered === false) {
+      cell.classList.add("uncovered");
+      cell.textContent = state;
+    }
+  }
+}
+
+//creating table
 function initGame(container: HTMLDivElement | null) {
   if (!container) {
     throw new Error("Error loading game");
   }
 
-  const board = new Board(13, 7, 20);
+  const table = document.createElement("table");
+  const stateCallback = refreshHTML.bind(null, table);
+
+  const board = new Board(stateCallback, 13, 7, 10);
   const width = board.getWidth();
   const height = board.getHeight();
-
-  const table = document.createElement("table");
 
   for (let y = 0; y < height; y++) {
     const row = document.createElement("tr");
     for (let x = 0; x < width; x++) {
       const cell = document.createElement("td");
       cell.classList.add("covered");
+      cell.dataset.x = x.toString();
+      cell.dataset.y = y.toString();
+
+      //uncovering cells
       cell.onclick = () => {
-        const cellState = board.getXYState(x, y);
+        const cellState = board.uncover(x, y);
         switch (cellState) {
           case "💣":
             soundSprites.play("monster");
@@ -42,11 +69,11 @@ function initGame(container: HTMLDivElement | null) {
           case "":
             soundSprites.play("clearing-fog");
             break;
+          default:
+            soundSprites.play("monster");
         }
-        cell.textContent = cellState;
-        cell.classList.remove("covered");
-        cell.classList.add("uncovered");
       };
+
       row.appendChild(cell);
     }
     table.appendChild(row);
@@ -55,6 +82,7 @@ function initGame(container: HTMLDivElement | null) {
   container.appendChild(table);
 }
 
+//music switcher
 function switchMusic(event: Event) {
   const switchEl = <HTMLSelectElement>event.currentTarget;
   if (!switchEl.value) {
