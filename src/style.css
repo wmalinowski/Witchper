@@ -23,6 +23,10 @@ td.uncovered {
   background-color: aqua;
 }
 
+td.flagged {
+  background-color: blue;
+}
+
 .info {
   text-align: center;
   font-family: Cambria, serif;

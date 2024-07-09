@@ -13,6 +13,11 @@ enum FieldInfo {
   Eight = "8",
 }
 
+enum ClickAction {
+  Uncover = "Uncover",
+  Flag = "Flag",
+}
+
 type StateCallback = (board: Board) => void;
 
 export class Board {
@@ -23,6 +28,8 @@ export class Board {
   private state: FieldInfo[];
   private coveredFields: Boolean[];
   private onStateChanged: StateCallback;
+
+  public currentAction: ClickAction = ClickAction.Uncover;
 
   constructor(
     onStateChanged: StateCallback,
@@ -72,6 +79,17 @@ export class Board {
     }
 
     return this.state[y * this.width + x];
+  }
+
+  toggleAction() {
+    if (this.currentAction === ClickAction.Flag) {
+      this.currentAction = ClickAction.Uncover;
+    } else {
+      this.currentAction = ClickAction.Flag;
+    }
+    if (this.onStateChanged) {
+      this.onStateChanged(this);
+    }
   }
 
   getCoveredState(x: number, y: number): Boolean | undefined {

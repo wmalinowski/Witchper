@@ -17,7 +17,19 @@ function isHowlOptions(json: unknown): json is HowlOptions {
 if (!isHowlOptions(json)) throw new Error("Internal error");
 const soundSprites = new Howl(json);
 
-function refreshHTML(tableEl: HTMLTableElement, board: Board) {
+function refreshHTML(container: HTMLDivElement, board: Board) {
+  const clickActionButton = <HTMLButtonElement>container.querySelector(
+    ':scope [data-action="reveal_flag"]',
+  );
+  if (!clickActionButton) {
+    throw new Error("Internal HTML error");
+  }
+  clickActionButton.textContent = board.currentAction;
+
+  const tableEl = container.querySelector(":scope table");
+  if (!tableEl) {
+    throw new Error("Internal HTML error");
+  }
   const cells = <NodeListOf<HTMLTableCellElement>>(
     tableEl.querySelectorAll(":scope td")
   );
@@ -44,13 +56,21 @@ function initGame(container: HTMLDivElement | null) {
     throw new Error("Error loading game");
   }
 
-  const table = document.createElement("table");
-  const stateCallback = refreshHTML.bind(null, table);
+  const stateCallback = refreshHTML.bind(null, container);
 
   const board = new Board(stateCallback, 13, 7, 10);
   const width = board.getWidth();
   const height = board.getHeight();
 
+  const clickActionButton = document.createElement("button");
+  clickActionButton.dataset.action = "reveal_flag";
+  clickActionButton.textContent = board.currentAction;
+  clickActionButton.addEventListener('click', () => {
+    board.toggleAction();
+  });
+  container.appendChild(clickActionButton);
+
+  const table = document.createElement("table");
   for (let y = 0; y < height; y++) {
     const row = document.createElement("tr");
     for (let x = 0; x < width; x++) {
@@ -61,6 +81,7 @@ function initGame(container: HTMLDivElement | null) {
 
       //uncovering cells
       cell.onclick = () => {
+        if (cell.classList.contains("covered")) {
         const cellState = board.uncover(x, y);
         switch (cellState) {
           case "💣":
@@ -72,6 +93,7 @@ function initGame(container: HTMLDivElement | null) {
           default:
             soundSprites.play("monster");
         }
+      }
       };
 
       row.appendChild(cell);
