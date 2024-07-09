@@ -13,7 +13,7 @@ enum FieldInfo {
   Eight = "8",
 }
 
-enum ClickAction {
+export enum ClickAction {
   Uncover = "Uncover",
   Flag = "Flag",
 }
@@ -28,6 +28,7 @@ export class Board {
   private state: FieldInfo[];
   private coveredFields: Boolean[];
   private onStateChanged: StateCallback;
+  private flaggedFields: Boolean[];
 
   public currentAction: ClickAction = ClickAction.Uncover;
 
@@ -45,6 +46,7 @@ export class Board {
     // state
     this.state = Array(this.width * this.height).fill(FieldInfo.Empty);
     this.coveredFields = Array(this.width * this.height).fill(true);
+    this.flaggedFields = Array(this.width * this.height).fill(false);
 
     // bombs
     for (let i = 0; i < this.numBombs; i++) {
@@ -87,6 +89,22 @@ export class Board {
     } else {
       this.currentAction = ClickAction.Flag;
     }
+    if (this.onStateChanged) {
+      this.onStateChanged(this);
+    }
+  }
+
+  getFlaggedState(x: number, y: number): Boolean | undefined {
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
+      return;
+    }
+
+    return this.flaggedFields[y * this.width + x];
+  }
+
+  toggleFlag(x: number, y: number) {
+    this.flaggedFields[y * this.width + x] =
+      !this.flaggedFields[y * this.width + x];
     if (this.onStateChanged) {
       this.onStateChanged(this);
     }
