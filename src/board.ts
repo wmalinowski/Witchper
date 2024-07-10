@@ -18,7 +18,7 @@ export enum ClickAction {
   Flag = "Flag",
 }
 
-enum GameProgress {
+export enum GameProgress {
   notStarted = "Not started",
   Started = "Started",
   Won = "Won",
@@ -131,6 +131,12 @@ export class Board {
   }
 
   uncover(x: number, y: number): FieldInfo | undefined {
+    if (this.gameState === GameProgress.notStarted) {
+      this.gameState = GameProgress.Started;
+    }
+    if (this.gameState !== GameProgress.Started) {
+      return;
+    }
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
       return undefined;
     }
@@ -139,6 +145,11 @@ export class Board {
     }
     this.coveredFields[y * this.width + x] = false;
     const fieldInfo = this.getXYState(x, y);
+
+    
+    if (fieldInfo === FieldInfo.Bomb){
+      this.gameState = GameProgress.Lost;
+    }
 
     if (fieldInfo === FieldInfo.Empty) {
       if (this.getXYState(x - 1, y - 1) !== FieldInfo.Bomb) {

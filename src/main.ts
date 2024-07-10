@@ -1,7 +1,7 @@
 import { Howl } from "howler";
 import type { HowlOptions } from "howler";
 import "./style.css";
-import { Board, ClickAction } from "./board.ts";
+import { Board, ClickAction, GameProgress } from "./board.ts";
 import json from "./sprites.json";
 
 function isHowlOptions(json: unknown): json is HowlOptions {
@@ -74,6 +74,11 @@ function onCellClick(board: Board, event: Event) {
   if (action === ClickAction.Flag) {
     board.toggleFlag(x, y);
   } else {
+    if (board.getGameState() !== GameProgress.Started) {
+      if (board.getGameState() !== GameProgress.notStarted) {
+        return
+      }
+    }
     const cellState = board.uncover(x, y);
     switch (cellState) {
       case "💣":
@@ -83,7 +88,7 @@ function onCellClick(board: Board, event: Event) {
         soundSprites.play("clearing-fog");
         break;
       default:
-        soundSprites.play("monster");
+        soundSprites.play("clearing-fog");
     }
   }
 }
