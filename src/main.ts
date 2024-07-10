@@ -25,6 +25,11 @@ function refreshHTML(container: HTMLDivElement, board: Board) {
     throw new Error("Internal HTML error");
   }
   clickActionButton.textContent = board.currentAction;
+  const gameStateEl = container.querySelector(":scope .gameState");
+  if (!gameStateEl) {
+    throw new Error("Internal HTML error");
+  }
+  gameStateEl.textContent = board.getGameState();
 
   const tableEl = container.querySelector(":scope table");
   if (!tableEl) {
@@ -121,6 +126,10 @@ function initGame(container: HTMLDivElement | null) {
   }
 
   container.appendChild(table);
+
+  const gameStateEl = document.createElement("p");
+  gameStateEl.classList.add("gameState")
+  container.appendChild(gameStateEl);
 }
 
 //music switcher

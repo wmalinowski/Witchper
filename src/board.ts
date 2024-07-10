@@ -18,6 +18,13 @@ export enum ClickAction {
   Flag = "Flag",
 }
 
+enum GameProgress {
+  notStarted = "Not started",
+  Started = "Started",
+  Won = "Won",
+  Lost = "Lost",
+}
+
 type StateCallback = (board: Board) => void;
 
 export class Board {
@@ -29,7 +36,8 @@ export class Board {
   private coveredFields: Boolean[];
   private onStateChanged: StateCallback;
   private flaggedFields: Boolean[];
-
+  private gameState: GameProgress = GameProgress.notStarted;
+  
   public currentAction: ClickAction = ClickAction.Uncover;
 
   constructor(
@@ -73,6 +81,10 @@ export class Board {
           this.state[y * this.width + x] = numBombs.toString();
       }
     }
+  }
+
+  getGameState(): GameProgress  {
+    return this.gameState;
   }
 
   getXYState(x: number, y: number): FieldInfo {
