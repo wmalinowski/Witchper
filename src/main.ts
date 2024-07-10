@@ -50,11 +50,35 @@ function refreshHTML(container: HTMLDivElement, board: Board) {
     if (covered === true) {
       cell.classList.add("covered");
       if (flagged) {
-        cell.classList.add("flagged")
+        cell.classList.add("flagged");
       }
     } else if (covered === false) {
       cell.classList.add("uncovered");
       cell.textContent = state;
+
+      switch (state) {
+        case "2":
+          cell.classList.add("two");
+          break;
+        case "3":
+          cell.classList.add("three");
+          break;
+        case "4":
+          cell.classList.add("four");
+          break;
+        case "5":
+          cell.classList.add("five");
+          break;
+        case "6":
+          cell.classList.add("six");
+          break;
+        case "7":
+          cell.classList.add("seven");
+          break;
+        case "8":
+          cell.classList.add("eight");
+          break;
+      }
     }
   }
 }
@@ -76,7 +100,7 @@ function onCellClick(board: Board, event: Event) {
   } else {
     if (board.getGameState() !== GameProgress.Started) {
       if (board.getGameState() !== GameProgress.notStarted) {
-        return
+        return;
       }
     }
     const cellState = board.uncover(x, y);
@@ -85,6 +109,9 @@ function onCellClick(board: Board, event: Event) {
         soundSprites.play("monster");
         break;
       case "":
+        soundSprites.play("clearing-fog");
+        break;
+      case "1":
         soundSprites.play("clearing-fog");
         break;
       default:
@@ -133,7 +160,7 @@ function initGame(container: HTMLDivElement | null) {
   container.appendChild(table);
 
   const gameStateEl = document.createElement("p");
-  gameStateEl.classList.add("gameState")
+  gameStateEl.classList.add("gameState");
   container.appendChild(gameStateEl);
 }
 

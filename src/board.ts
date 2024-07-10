@@ -37,7 +37,7 @@ export class Board {
   private onStateChanged: StateCallback;
   private flaggedFields: Boolean[];
   private gameState: GameProgress = GameProgress.notStarted;
-  
+
   public currentAction: ClickAction = ClickAction.Uncover;
 
   constructor(
@@ -55,6 +55,8 @@ export class Board {
     this.state = Array(this.width * this.height).fill(FieldInfo.Empty);
     this.coveredFields = Array(this.width * this.height).fill(true);
     this.flaggedFields = Array(this.width * this.height).fill(false);
+
+    //winning
 
     // bombs
     for (let i = 0; i < this.numBombs; i++) {
@@ -83,7 +85,7 @@ export class Board {
     }
   }
 
-  getGameState(): GameProgress  {
+  getGameState(): GameProgress {
     return this.gameState;
   }
 
@@ -146,8 +148,7 @@ export class Board {
     this.coveredFields[y * this.width + x] = false;
     const fieldInfo = this.getXYState(x, y);
 
-    
-    if (fieldInfo === FieldInfo.Bomb){
+    if (fieldInfo === FieldInfo.Bomb) {
       this.gameState = GameProgress.Lost;
     }
 
