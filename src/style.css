@@ -60,17 +60,17 @@ td.eight {
 }
 
 td.covered {
-  background-image: url("graphic/fog.png");
+  background-image: url("/graphic/fog.png");
   border: none;
 }
 
 td.uncovered {
-  background-image: url("graphic/grass.png");
+  background-image: url("/graphic/grass.png");
   opacity: 0.85;
 }
 
 td.flagged {
-  background-image: url("graphic/sword.png"), url("graphic/fog.png");
+  background-image: url("/graphic/sword.png"), url("/graphic/fog.png");
 }
 
 .info {

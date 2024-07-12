@@ -31,6 +31,7 @@ export class Board {
   private width: number;
   private height: number;
   private numBombs: number;
+  private toUncover: number;
 
   private state: FieldInfo[];
   private coveredFields: Boolean[];
@@ -50,6 +51,7 @@ export class Board {
     this.width = width;
     this.height = height;
     this.numBombs = numBombs;
+    this.toUncover = this.width * this.height - this.numBombs;
 
     // state
     this.state = Array(this.width * this.height).fill(FieldInfo.Empty);
@@ -98,6 +100,10 @@ export class Board {
   }
 
   toggleAction() {
+    if (this.gameState !== GameProgress.Started) {
+      return;
+    }
+
     if (this.currentAction === ClickAction.Flag) {
       this.currentAction = ClickAction.Uncover;
     } else {
@@ -117,6 +123,9 @@ export class Board {
   }
 
   toggleFlag(x: number, y: number) {
+    if (this.gameState !== GameProgress.Started) {
+      return;
+    }
     this.flaggedFields[y * this.width + x] =
       !this.flaggedFields[y * this.width + x];
     if (this.onStateChanged) {
@@ -177,6 +186,14 @@ export class Board {
       if (this.getXYState(x + 1, y + 1) !== FieldInfo.Bomb) {
         this.uncover(x + 1, y + 1);
       }
+    }
+
+    if (fieldInfo !== FieldInfo.Bomb) {
+      this.toUncover -= 1;
+    }
+
+    if (this.toUncover === 0) {
+      this.gameState = GameProgress.Won;
     }
 
     if (this.onStateChanged) this.onStateChanged(this);

@@ -1,7 +1,7 @@
 {
   "name": "witchper",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "build-assets": "audiosprite -o public/sound/sprites -u sound -f howler2 -c 1 -e mp3 assets/sound/* && mv public/sound/sprites.json src/",

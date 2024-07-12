@@ -15,6 +15,10 @@ function isHowlOptions(json: unknown): json is HowlOptions {
   );
 }
 if (!isHowlOptions(json)) throw new Error("Internal error");
+
+// shorten the monster sound
+json.sprite["monster"][1] = 700;
+
 const soundSprites = new Howl(json);
 
 function refreshHTML(container: HTMLDivElement, board: Board) {
@@ -29,7 +33,12 @@ function refreshHTML(container: HTMLDivElement, board: Board) {
   if (!gameStateEl) {
     throw new Error("Internal HTML error");
   }
-  gameStateEl.textContent = board.getGameState();
+  const gameState = board.getGameState();
+  gameStateEl.textContent = gameState;
+
+  if (gameState === GameProgress.Won) {
+    soundSprites.play("win");
+  }
 
   const tableEl = container.querySelector(":scope table");
   if (!tableEl) {
